@@ -1,0 +1,64 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+
+{%  include 'accounts/status.html' %}
+
+<br>
+
+<div class="row">
+	<div class="col-md-5">
+		<h5>FORMS:</h5>
+		<hr>
+		<div class="card2 card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="{% url 'form_create' %}">Create Form</a>
+			<table class="table table-sm">
+				<tr>
+					<th>Form Name</th>
+					<th>Created On</th>
+					<th>To be completed on</th>
+					<th>Status</th>
+					<th></th>
+					<th></th>
+				</tr>
+
+				{% for safetyform in formview %}
+					<tr>
+						
+						<td>{{safetyform.name}}</td>
+						<td>{{safetyform.date_created}}</td>
+						<td>{{safetyform.date_completion}}</td>
+						<td>{{safetyform.status}}</td>
+						<td><a class="btn btn-sm btn-info" href="{% url 'safetyform' safetyform.id %}">View</a></td>
+						<td><a class="btn btn-sm btn-danger" href="{% url 'form_delete' safetyform.id %}">Delete</a></td>
+					</tr>
+				{% endfor %}
+			</table>
+				{% if formview.has_other_pages %}
+				<ul class="pagination">
+					{% if formview.has_previous %}
+					<li><a href="?page={{ formview.previous_page_number }}">&laquo;</a></li>
+					{% else %}
+					<li class="disabled"><span>&laquo;</span></li>
+					{% endif %}
+					{% for i in formview.paginator.page_range %}
+					{% if formview.number == i %}
+						<li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+					{% else %}
+						<li><a href="?page={{ i }}">{{ i }}</a></li>
+					{% endif %}
+					{% endfor %}
+					{% if formview.has_next %}
+					<li><a href="?page={{ formview.next_page_number }}">&raquo;</a></li>
+					{% else %}
+					<li class="disabled"><span>&raquo;</span></li>
+					{% endif %}
+				
+				{% endif %}
+				</ul>		
+			</div>
+	</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,161 @@
+	#logo{
+		}
+
+	body{
+		background-color: #ebeff5; 
+	}
+
+
+	#total-orders{
+		background-color: #F2BC3F;
+	}
+
+
+	#orders-delivered{
+		background-color: #34516C;
+	}
+
+	#orders-pending{
+		background-color: #841017;
+	}
+
+	.pagination {
+		clear:both;
+		position:relative;
+		font-size:16px;
+		text-align:center;
+	}
+	
+	.pagination span, .pagination a {
+		display:inline-block;
+		margin: 2px 2px 2px 0;
+		padding:6px 9px 5px 9px;
+		text-decoration:none;
+		color: rgb(0, 0, 0);
+		background: rgb(255, 253, 253);
+	}
+	
+	.pagination .active{
+		font-weight: bold;
+		background: rgba(255, 253, 253, 0.39);
+	}
+
+	.hello-msg{
+		font-size: 18px;
+		margin-right: 20px;
+	}
+
+	.table {
+		border-collapse: collapse;
+		margin: 25px 0;
+		font-size: 18px;
+
+	}
+	.table tr{
+	
+		color: #000000;
+		text-align: left;
+
+	}
+
+
+	.h5 {
+		font-size: 25px;
+	}
+
+	.table{
+		width:auto;
+		height:auto;
+	}
+
+	.table2{
+		width:auto;
+		height:auto;
+		position: static;
+	}
+
+	.table3{
+		width:auto;
+		height:auto;
+		position: static;
+	}
+	.card2{
+		width: 600px;
+		height:auto;
+		position: static;
+		background-color: #e7f6ff;
+	}
+
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	  }
+	  
+	  *::before, *::after {
+		  box-sizing: border-box;
+	  }
+	  
+	  .container {
+		width: 100%;
+		max-width: 1024px;
+		display: block;
+		margin: 30px auto;
+	  }
+	  
+	  ul {
+		list-style: none;
+	  }
+	  
+	  a {
+		text-decoration: none;
+	  }
+	  
+	  .nav {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+	  }
+	  
+	  
+	  .navigation {
+		letter-spacing: -4px;     /* to remove 4px inline-block gap */
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		background: #0099EE;
+	  }
+	  
+	  .navigation * {
+		letter-spacing: 0;        /* to remove 4px inline-block gap */ 
+	  }
+	  
+	  .navigation li {
+		display: inline-block;
+	  }
+	  
+	  .navigation li:first-child { /* add some space before 1st child */ 
+		margin-left: 20px;;
+	  }
+	  
+	  .navigation li a {
+		display: block;
+		padding: 0 20px;
+		font-size: 14px;
+		font-family: Arial, Helvetica, sans-serif;
+		line-height: 40px;  /* sets menu height and vertical aligning text to the middle */ 
+		text-decoration: none; 
+		color: #FFF;
+	  }
+	  
+	  .navigation a:hover { 
+		background: #3cb9ff; 
+	  }  
+		
+	  .selected-item { 
+		background: #e7f6ff !important; 
+		color: #0099EE !important; 
+		cursor: default !important; 
+	  }  

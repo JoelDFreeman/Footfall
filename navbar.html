@@ -1,0 +1,11 @@
+{% load static %}
+
+
+<ul class="navigation">
+  <img src="{% static 'images/digi.png' %}" width="150" height="100">
+  <li><a href="{% url 'home' %}">DASHBOARD</a></li>
+  <li><a href="{% url 'forms' %}">FORMS</a></li>
+  <li><a href="{% url 'callendar' %}">CALLENDAR</a></li>
+  <span class="hello-msg">Welcome, {{request.user}}</span>
+  <span ><a  class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
+</ul> 

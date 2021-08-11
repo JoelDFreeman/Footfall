@@ -1,0 +1,95 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h5>Forms Page:</h5> 
+    <br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h5>Customers</h5>
+            <div class="row">
+                <div class="col">
+                    <div class="card card-body">
+                        <h5>Filter Search</h5>
+                        <form method="get">
+                            {{myFilter.form}}
+            
+                        <button class="btn btn-primary" type="submit">Search</button>
+                      </form>
+            
+                    </div>
+                </div>
+              </div>
+            <div class="card card-body"></div>
+            <table class="table table-bordered">
+              <div class="row">
+                <div class="col-md-5">
+                  <h5>FORMS:</h5>
+                  <hr>
+                  <div class="card card-body">
+                    <a class="btn btn-primary  btn-sm btn-block" href="{% url 'form_create' %}">Create Form</a>
+                    <table class="table table-sm">
+                      <tr>
+                        <th>Form Name</th>
+                        <th>Created On</th>
+                        <th>To be completed on</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                      </tr>
+              
+                      {% for safetyform in formview %}
+                        <tr>
+                          
+                          <td>{{safetyform.name}}</td>
+                          <td>{{safetyform.date_created}}</td>
+                          <td>{{safetyform.date_completion}}</td>
+                          <td>{{safetyform.status}}</td>
+                          <td><a class="btn btn-sm btn-info" href="{% url 'safetyform' safetyform.id %}">View</a></td>
+                          <td><a class="btn btn-sm btn-danger" href="{% url 'form_delete' safetyform.id %}">Delete</a></td>
+                        </tr>
+                      {% endfor %}
+                    </table>
+                      {% if formview.has_other_pages %}
+                      <ul class="pagination">
+                        {% if formview.has_previous %}
+                        <li><a href="?page={{ formview.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in formview.paginator.page_range %}
+                        {% if formview.number == i %}
+                          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                          <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if formview.has_next %}
+                        <li><a href="?page={{ formview.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                      
+                      {% endif %}
+                    
+                  </div>
+                </div>
+                
+                  </div>
+                </div>
+              
+              </div>
+</body>
+</html>
+
+{% endblock %}
