@@ -178,10 +178,10 @@ def download_csv(request):
     writer = csv.writer(response)
     writer.writerow(['name','phone'])
  
-    form = Form.objects.all().values_list('name','phone')
+    safetyForm = SafetyForm.objects.all()
  
-    for form in forms:
-        writer.writerow(form)
+    for safetyForm in safetyForm:
+        writer.writerow(SafetyForm)
  
      
     return response
@@ -224,3 +224,40 @@ def safetyform(request, pk_test):
 
 	context = {'form':form}
 	return render(request, 'accounts/safetyform.html', context)	
+
+@login_required(login_url='login')
+def check_create(request):
+	form = NewSafetyCheck(request.POST or None)
+	if form.is_valid():
+		form.save()
+		return redirect('/form_create')
+
+	context = {
+		'form': form
+	} 	
+	return render(request,"accounts/check_create.html", context)
+
+@login_required(login_url='login')
+def check_update(request, pk):
+	safetycheck = SafetyCheck.objects.get(id=pk)
+	form = NewSafetyCheck(instance=SafetyCheck)
+	print('SAFETYCHECK:', SafetyCheck)
+	if request.method == 'POST':
+
+		form = NewSafetyCheck(request.POST, instance=SafetyCheck)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+
+	context = {'form':form}
+	return render(request, 'accounts/check_create.html', context)
+
+@login_required(login_url='login')
+def check_delete(request, pk):
+	safetycheck = SafetyCheck.objects.get(id=pk)
+	if request.method == "POST":
+		safetycheck.delete()
+		return redirect('/')
+
+	context = {'item':safetycheck}
+	return render(request, 'accounts/delete.html', context)				

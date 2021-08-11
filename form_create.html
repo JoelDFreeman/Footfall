@@ -1,0 +1,18 @@
+{%  extends 'accounts/main.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+
+<form method='POST'> {% csrf_token %}
+{{ form|crispy }} 
+<tr>
+    <th><label for="SafetyCheck">Hold Control to Select Multiple Checks:</label></th>
+</tr>
+<div>
+<tr>  
+<input type='submit' value='Save' /> 
+<a class="btn btn-primary  btn-sm btn-sm" href="{% url 'check_create' %}">Create New Check </a>
+</tr>
+</div> 
+</form>
+{% endblock %}
