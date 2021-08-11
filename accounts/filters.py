@@ -5,25 +5,22 @@ from .models import *
 
 class SafetyFormFilter(django_filters.FilterSet):
 	start_date = DateFilter(field_name="date_created", lookup_expr='gte')
-	end_date = DateFilter(field_name="date_created", lookup_expr='lte')
-	note = CharFilter(field_name='note', lookup_expr='icontains')
+	end_date = DateFilter(field_name="date_completion", lookup_expr='lte')
+	note = CharFilter(field_name='form_note', lookup_expr='icontains')
 
 
 	class Meta:
 		model = SafetyForm
 		fields = '__all__'
-		exclude = []		
+		exclude = [
+			"date_created",
+			'description',
+			'form_note',
+			'user',
+			'date_completion',
+			'SafetyCheck',]		
 
-class FormviewFilter(django_filters.FilterSet):
-	start_date = DateFilter(field_name="date_created", lookup_expr='gte')
-	end_date = DateFilter(field_name="date_created", lookup_expr='lte')
-	note = CharFilter(field_name='note', lookup_expr='icontains')
 
-
-	class Meta:
-		model = SafetyForm
-		fields = '__all__'
-		exclude = []	
 
 
 				

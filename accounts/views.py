@@ -5,7 +5,7 @@ from django.forms import *
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.admin.widgets import AdminDateWidget, AdminTimeWidget, AdminSplitDateTime
 from django.contrib import messages
 from accounts.models import *
 from django.contrib.auth.decorators import login_required
@@ -62,6 +62,8 @@ def home(request):
 	Pass = formview.filter(status='Pass').count()
 	Quarantine = formview.filter(status='Quarantine').count()
 	Scrap = formview.filter(status='Scrap').count()
+	Pending = formview.filter(status='Pending').count()
+
 	page = request.GET.get('page', 1)
 	
 
@@ -76,7 +78,7 @@ def home(request):
 	
 
 	context = {'formview':formview,'total_forms':total_forms,'Pass':Pass,
-	'Quarantine':Quarantine, 'Scrap':Scrap, 'paginator':paginator}
+	'Quarantine':Quarantine, 'Scrap':Scrap, 'Pending':Pending, 'paginator':paginator}
 
 	return render(request, 'accounts/dashboard.html', context)
 
@@ -103,6 +105,7 @@ def formview(request):
 	Pass = formview.filter(status='Pass').count()
 	Scrap = formview.filter(status='Scrap').filter(status='Quarantine').count()
 	Quarantine = formview.filter(status='Quarantine').count()
+	Pending = formview.filter(status='Pending').count()
 
 		 
 	
@@ -119,9 +122,32 @@ def formview(request):
 	
 
 	context = {'formview':formview,'total_forms':total_forms,'Pass':Pass, 'myFilter':myFilter,
-	'Scrap':Scrap, 'Quarantine':Quarantine, 'paginator':paginator}
+	'Scrap':Scrap, 'Quarantine':Quarantine, 'Pending':Pending, 'paginator':paginator}
 
 	return render(request, 'accounts/formview.html', context)
+
+@login_required(login_url='login')
+@admin_only
+def forms(request):
+	formview = SafetyForm.objects.all()
+
+	myFilter = SafetyFormFilter(request.GET, queryset=formview)
+	formview = myFilter.qs 
+
+	page = request.GET.get('page', 1)
+
+	paginator = Paginator(formview, 10)	
+	try:
+		formview = paginator.page(page)
+	except PageNotAnInteger:
+		formview = paginator.page(1)
+	except EmptyPage:
+		formview= paginator.page(paginator.num_pages)
+
+	context = {
+		'formview':formview, 'myFilter':myFilter,'paginator':paginator
+	}
+	return render(request, 'accounts/forms.html', context)
 
 @login_required(login_url='login')
 def form_create(request):
@@ -130,7 +156,7 @@ def form_create(request):
 		form.save()
 	
 	context = {
-		'form': form
+		'form': form,
 	} 	
 	return render(request,"accounts/form_create.html", context)
 
@@ -152,10 +178,10 @@ def download_csv(request):
     writer = csv.writer(response)
     writer.writerow(['name','phone'])
  
-    form = Form.objects.all().values_list('name','phone')
+    safetyForm = SafetyForm.objects.all()
  
-    for form in forms:
-        writer.writerow(form)
+    for safetyForm in safetyForm:
+        writer.writerow(SafetyForm)
  
      
     return response
@@ -198,3 +224,40 @@ def safetyform(request, pk_test):
 
 	context = {'form':form}
 	return render(request, 'accounts/safetyform.html', context)	
+
+@login_required(login_url='login')
+def check_create(request):
+	form = NewSafetyCheck(request.POST or None)
+	if form.is_valid():
+		form.save()
+		return redirect('/form_create')
+
+	context = {
+		'form': form
+	} 	
+	return render(request,"accounts/check_create.html", context)
+
+@login_required(login_url='login')
+def check_update(request, pk):
+	safetycheck = SafetyCheck.objects.get(id=pk)
+	form = NewSafetyCheck(instance=SafetyCheck)
+	print('SAFETYCHECK:', SafetyCheck)
+	if request.method == 'POST':
+
+		form = NewSafetyCheck(request.POST, instance=SafetyCheck)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+
+	context = {'form':form}
+	return render(request, 'accounts/check_create.html', context)
+
+@login_required(login_url='login')
+def check_delete(request, pk):
+	safetycheck = SafetyCheck.objects.get(id=pk)
+	if request.method == "POST":
+		safetycheck.delete()
+		return redirect('/')
+
+	context = {'item':safetycheck}
+	return render(request, 'accounts/delete.html', context)				

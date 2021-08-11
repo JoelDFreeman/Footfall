@@ -17,10 +17,14 @@ urlpatterns = [
     path('form_delete/<str:pk>/', views.form_delete, name="form_delete"),
     path('formview/', views.formview, name="formview"),
     path('safetyform/<str:pk_test>/', views.safetyform, name="safetyform"),
-
+    path('forms', views.forms, name="forms"),
     path('callendar', views.callendar, name="callendar"),
     
     path('export/',views.download_csv,name='export'),
+
+    path('check_create/', views.check_create, name="check_create"),
+    path('check_update/<str:pk>/', views.check_update, name="check_update"),
+    path('check_delete/<str:pk>/', views.check_delete, name="check_delete"),
     
 ]
 
