@@ -150,6 +150,16 @@ def forms(request):
 	return render(request, 'accounts/forms.html', context)
 
 @login_required(login_url='login')
+def form_delete(request, pk):
+	safetyform = SafetyForm.objects.get(id=pk)
+	if request.method == "POST":
+		safetyform.delete()
+		return redirect('/')
+
+	context = {'item':safetyform}
+	return render(request, 'accounts/delete.html', context)
+
+@login_required(login_url='login')
 def form_create(request):
 	form = NewSafetyForm(request.POST or None)
 	if form.is_valid():
@@ -160,28 +170,34 @@ def form_create(request):
 	} 	
 	return render(request,"accounts/form_create.html", context)
 
-@login_required(login_url='login')
-def form_delete(request, pk):
-	safetyform = SafetyForm.objects.get(id=pk)
-	if request.method == "POST":
-		safetyform.delete()
-		return redirect('/')
-
-	context = {'item':safetyform}
-	return render(request, 'accounts/form_delete.html', context)
-
 def download_csv(request):
  
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="Formview.csv"' # your filename
  
     writer = csv.writer(response)
-    writer.writerow(['name','phone'])
+    writer.writerow([
+			'name',
+			'description',
+			'form_note',
+			'status',
+			'user',
+			'date_completion',
+			'SafetyCheck',
+			])
  
-    safetyForm = SafetyForm.objects.all()
+    safetyForms = SafetyForm.objects.all().values_list(
+			'name',
+			'description',
+			'form_note',
+			'status',
+			'user',
+			'date_completion',
+			'SafetyCheck',
+	)
  
-    for safetyForm in safetyForm:
-        writer.writerow(SafetyForm)
+    for safetyForm in safetyForms:
+        writer.writerow(safetyForm)
  
      
     return response
