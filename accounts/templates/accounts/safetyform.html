@@ -5,6 +5,12 @@
 
 <form method='POST'> {% csrf_token %}
 {{ form|crispy }}  
+
+{% for sc in safety_checks %}
+{{ sc }}
+<br>
+{% endfor %}
+
 <tr>
     <th><label for="SafetyCheck">Hold Control to Select Multiple Checks:</label></th>
 </tr>

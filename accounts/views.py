@@ -231,6 +231,12 @@ def safetyform(request, pk_test):
 	safetyform = SafetyForm.objects.get(id=pk_test)
 	form = NewSafetyForm(instance=safetyform)
 
+	safety_checks = safetyform.SafetyCheck.all()
+
+	safety_check_forms = []
+	for sc in safety_checks:
+		safety_check_forms.append(NewSafetyCheck(instance=sc))
+
 	if request.method == 'POST':
 
 		form = NewSafetyForm(request.POST, instance=safetyform)
@@ -238,7 +244,7 @@ def safetyform(request, pk_test):
 			form.save()
 			return redirect('/')
 
-	context = {'form':form}
+	context = {'form':form, 'safety_checks': safety_check_forms}
 	return render(request, 'accounts/safetyform.html', context)	
 
 @login_required(login_url='login')
