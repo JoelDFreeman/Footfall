@@ -15,10 +15,32 @@ from .models import *
 from .forms import *
 from .decorators import unauthenticated_user, allowed_users, admin_only
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import calendar
+from calendar import HTMLCalendar
+from datetime import datetime
+from .utils import Calendar
+from django.views import generic
+from django.utils.safestring import mark_safe
 
+class CalendarView(generic.ListView):
+    model = SafetyForm
+    template_name = 'accounts/calendar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # use today's date for the calendar
+        d = datetime.now()
+
+        # Instantiate our calendar class with today's year and date
+        cal = Calendar(d.year, d.month)
+
+        # Call the formatmonth method, which returns our calendar as a table
+        html_cal = cal.formatmonth(withyear=True)
+        context['calendar'] = mark_safe(html_cal)
+        return context
 
 @login_required(login_url='login')
-@admin_only
 def form_create(request):
 	form = form_create(request.POST or None)
 	if form.is_valid():
@@ -52,7 +74,6 @@ def logoutUser(request):
 	return redirect('login')
 
 @login_required(login_url='login')
-@admin_only
 def home(request):
 	formview = SafetyForm.objects.all()
 	
@@ -83,7 +104,6 @@ def home(request):
 	return render(request, 'accounts/dashboard.html', context)
 
 @login_required(login_url='login')
-@admin_only
 def formview(request):
 	formview = SafetyForm.objects.all()
 	
@@ -127,7 +147,6 @@ def formview(request):
 	return render(request, 'accounts/formview.html', context)
 
 @login_required(login_url='login')
-@admin_only
 def forms(request):
 	formview = SafetyForm.objects.all()
 
@@ -150,6 +169,16 @@ def forms(request):
 	return render(request, 'accounts/forms.html', context)
 
 @login_required(login_url='login')
+def form_delete(request, pk):
+	safetyform = SafetyForm.objects.get(id=pk)
+	if request.method == "POST":
+		safetyform.delete()
+		return redirect('/')
+
+	context = {'item':safetyform}
+	return render(request, 'accounts/delete.html', context)
+
+@login_required(login_url='login')
 def form_create(request):
 	form = NewSafetyForm(request.POST or None)
 	if form.is_valid():
@@ -160,28 +189,34 @@ def form_create(request):
 	} 	
 	return render(request,"accounts/form_create.html", context)
 
-@login_required(login_url='login')
-def form_delete(request, pk):
-	safetyform = SafetyForm.objects.get(id=pk)
-	if request.method == "POST":
-		safetyform.delete()
-		return redirect('/')
-
-	context = {'item':safetyform}
-	return render(request, 'accounts/form_delete.html', context)
-
 def download_csv(request):
  
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="Formview.csv"' # your filename
  
     writer = csv.writer(response)
-    writer.writerow(['name','phone'])
+    writer.writerow([
+			'name',
+			'description',
+			'form_note',
+			'status',
+			'user',
+			'date_completion',
+			'SafetyCheck',
+			])
  
-    safetyForm = SafetyForm.objects.all()
+    safetyForms = SafetyForm.objects.all().values_list(
+			'name',
+			'description',
+			'form_note',
+			'status',
+			'user',
+			'date_completion',
+			'SafetyCheck',
+	)
  
-    for safetyForm in safetyForm:
-        writer.writerow(SafetyForm)
+    for safetyForm in safetyForms:
+        writer.writerow(safetyForm)
  
      
     return response
@@ -205,15 +240,31 @@ def accountSettings(request):
 	return render(request, 'accounts/account_settings.html')
 
 @login_required(login_url='login')
-def callendar(request):
+def calendar(request):
 
-	return render(request, 'accounts/callendar.html')
+	# get current year
+	now = datetime.now()
+	current_year = now.year
+
+	# cal = HTMLCalendar().formatmonth(
+		# year,
+		# month)
+
+	context= {"current_year":current_year}
+
+	return render(request, 'accounts/calendar.html', context)
 
 
 @login_required(login_url='login')
 def safetyform(request, pk_test):
 	safetyform = SafetyForm.objects.get(id=pk_test)
 	form = NewSafetyForm(instance=safetyform)
+
+	safety_checks = safetyform.SafetyCheck.all()
+
+	safety_check_forms = []
+	for sc in safety_checks:
+		safety_check_forms.append(NewSafetyCheck(instance=sc))
 
 	if request.method == 'POST':
 
@@ -222,7 +273,7 @@ def safetyform(request, pk_test):
 			form.save()
 			return redirect('/')
 
-	context = {'form':form}
+	context = {'form':form, 'safety_checks': safety_check_forms}
 	return render(request, 'accounts/safetyform.html', context)	
 
 @login_required(login_url='login')

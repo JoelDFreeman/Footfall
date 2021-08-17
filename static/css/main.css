@@ -1,6 +1,4 @@
-	#logo{
-		}
-
+	
 	body{
 		background-color: #ebeff5; 
 	}
@@ -43,6 +41,7 @@
 	.hello-msg{
 		font-size: 18px;
 		margin-right: 20px;
+		color: rgb(0, 0, 0); 
 	}
 
 	.table {
@@ -143,7 +142,7 @@
 	  .navigation li a {
 		display: block;
 		padding: 0 20px;
-		font-size: 14px;
+		font-size: 24px;
 		font-family: Arial, Helvetica, sans-serif;
 		line-height: 40px;  /* sets menu height and vertical aligning text to the middle */ 
 		text-decoration: none; 
@@ -159,3 +158,44 @@
 		color: #0099EE !important; 
 		cursor: default !important; 
 	  }  
+
+	/* cal/static/cal/css/styles.css */
+
+.calendar {
+	width: 98%;
+	margin: auto;
+	font-size: 13px;
+  }
+  
+  .calendar tr, .calendar td {
+	border: 1px solid black;
+  }
+  
+  .calendar th {
+	padding: 10px;
+	text-align: center;
+	font-size: 18px;
+  }
+  
+  .calendar td {
+	width: 200px;
+	height: 150px;
+	padding: 20px 0px 0px 5px;
+  }
+  
+  .month {
+	font-size: 25px;
+  }
+  
+  .date {
+	font-size: 16px;
+  }
+  
+  ul {
+	height: 100%;
+	padding: 0px 5px 0px 20px;
+  }
+  
+  a {
+	color: #17a2b8;
+  }  

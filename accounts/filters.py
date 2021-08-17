@@ -16,7 +16,6 @@ class SafetyFormFilter(django_filters.FilterSet):
 			"date_created",
 			'description',
 			'form_note',
-			'user',
 			'date_completion',
 			'SafetyCheck',]		
 

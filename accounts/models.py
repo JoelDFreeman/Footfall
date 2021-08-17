@@ -15,9 +15,9 @@ class SafetyCheck(models.Model):
 		('Pass', 'Pass'),
 		('Fail', 'Fail'),
 		) 
-	name = models.CharField(default="Address 1", max_length=200, null=True)
+	name = models.CharField(max_length=200, null=True)
 	check_notes = models.CharField(max_length=1000, null=True, blank=True)
-	category = models.CharField(max_length=200, null=True, choices=CATEGORY)
+	category = models.CharField(max_length=200, null=True, blank=True,choices=CATEGORY)
 
 	def __str__(self):
 		return self.name
@@ -25,8 +25,6 @@ class SafetyCheck(models.Model):
 class SafetyForm(models.Model):
 	STATUS = (
 		('Pass', 'Pass'),
-		('Quarantine', 'Quarantine'),
-		('Scrap', 'Scrap'),
 		('Pending', 'Pending'),
 		)	
 	name = models.CharField(max_length=200, null=True)
@@ -41,9 +39,7 @@ class SafetyForm(models.Model):
 
 	def __str__(self):
 		return self.name
-
-	def __str__(self):
-		return self.SafetyCheck	
+	
 
 
 	

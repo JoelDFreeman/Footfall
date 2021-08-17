@@ -16,20 +16,14 @@
 <div class="row">
     <div class="col-md">
         <div class="card card-body">
-            <h5>Customers</h5>
-            <div class="row">
-                <div class="col">
-                    <div class="card card-body">
+
                         <h5>Filter Search</h5>
                         <form method="get">
                             {{myFilter.form}}
             
                         <button class="btn btn-primary" type="submit">Search</button>
                       </form>
-            
-                    </div>
-                </div>
-              </div>
+
             <div class="card card-body"></div>
             <table class="table table-bordered">
               <div class="row">
@@ -44,6 +38,7 @@
                         <th>Created On</th>
                         <th>To be completed on</th>
                         <th>Status</th>
+                        <th>Assigned User</th>
                         <th></th>
                         <th></th>
                       </tr>
@@ -55,6 +50,7 @@
                           <td>{{safetyform.date_created}}</td>
                           <td>{{safetyform.date_completion}}</td>
                           <td>{{safetyform.status}}</td>
+                          <td>{{safetyform.user}}</td>
                           <td><a class="btn btn-sm btn-info" href="{% url 'safetyform' safetyform.id %}">View</a></td>
                           <td><a class="btn btn-sm btn-danger" href="{% url 'form_delete' safetyform.id %}">Delete</a></td>
                         </tr>

@@ -18,8 +18,9 @@ urlpatterns = [
     path('formview/', views.formview, name="formview"),
     path('safetyform/<str:pk_test>/', views.safetyform, name="safetyform"),
     path('forms', views.forms, name="forms"),
-    path('callendar', views.callendar, name="callendar"),
-    
+
+    path('calendar', views.calendar, name="calendar"),
+        
     path('export/',views.download_csv,name='export'),
 
     path('check_create/', views.check_create, name="check_create"),
